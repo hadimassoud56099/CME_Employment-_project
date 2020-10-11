@@ -1,59 +1,41 @@
-import React ,{useState}from 'react'
-import {Grid} from "@material-ui/core"
-import {SearchBar, VideoList, VideoDetail} from "./components/index";
-import youtube from "./api/youtube"
-import NavBar from './components/NavBar/NavBar';
-import {BrowserRouter,Route,Link} from 'react-router-dom'
 
-import {Provider} from 'react-redux';//
-import Store from "./Store/Store";//
-import Counter from './components/Counter/Counter';//
+import React from 'react'
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Paper,Button  } from '@material-ui/core';
+import  VideosPage  from './VideosPage'
+import   Counter   from './components/Counter/Counter'
+import   CounterPage   from './components/CounterPage/CounterPage'
+
+
+
 
 
 function App() {
-  const [videos,setVideos] = useState([]);
-  const [selectedVideo, setSelectedVideo]= useState();
+ 
 
   return (
+    <Router>
     <React.Fragment>
-      
-      <NavBar/>
-    
-    <Grid style={{ justifyContent: "center" }} container spacing={10}>
-    <Grid item xs={11}>
-      <Grid container spacing={10}>
-        <Grid item xs={12}>
-          <SearchBar onSubmit={handleSubmit} />
-        </Grid>
+       <Paper elevation={6} style={{ padding: "25px", marginBottom:"15px" }}>
+       <Link className="nav-link" to="/VideosPage"> 
+       <Button variant="contained" color="info" style={{ marginRight: "25px" }} >Page One</Button>
+       </Link>
+     
+        <Link className="nav-link" to="/CounterPage/CounterPage">
+        <Button variant="contained" color="info"  >Page Two</Button>
+        </Link>
 
-        <Grid item xs={4}>
-          <VideoList videos={videos} onVideoSelect={setSelectedVideo} />
-        </Grid>
-        <Grid item xs={8}>
-          <VideoDetail video={selectedVideo} />
-        </Grid>
-      </Grid>
-    </Grid>
-  </Grid>
- 
-<Provider store={Store}><Counter/></Provider>
- 
-  </React.Fragment>
+        </Paper>
+        <Route path="/" component={App} exact />
+        <Route path="/VideosPage" component={VideosPage} exact />
+        <Route path="/CounterPage/CounterPage" component={CounterPage} />
+
+      
+         </React.Fragment>
+       </Router>
 
   )
-  async function handleSubmit(searchTerm) {
-    const { data: { items: videos } } = await youtube.get("search", {
-      params: {
-        part: "snippet",
-        maxResults: 5,
-        key: 'AIzaSyClKJUij31H2c1o3gnX7ndHZVyHLyEfaBo',
-        q: searchTerm,
-      }
-    });
-
-    setVideos(videos);
-    setSelectedVideo(videos[0]);
-  }
+ 
 }
 
 export default App
